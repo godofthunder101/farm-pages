@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Farm Test — R07 AI Inspector</title><link rel="stylesheet" href="./styles.css">
+<style>
+.inspection-frame{padding:16px}.inspection-tabs,.inspection-actions{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0 18px}
+.inspection-tabs button[aria-pressed=true]{background:#f4d992}.inspection-actions button{padding:10px 12px;font-size:.9rem}
+.inspection-preview{background:#fafafa;border-radius:10px;padding:10px;border:1px solid #77977c}
+.inspection-preview img{display:block;width:100%;height:auto;max-height:460px;object-fit:contain}
+.inspection-frame pre{background:#0d2115;color:#e6f2df;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:9px;max-height:380px;overflow:auto}
+.inspection-note{font-size:.91rem;color:#c4d5c6;line-height:1.5}.inspection-links{display:flex;gap:18px;flex-wrap:wrap}
+</style><script defer src="./r07-inspect.js"></script></head>
+<body><main id="app"><header>
+<small>PHONE-ONLY / AI INSPECTION / R07-P1</small><h1>Farm inspection</h1>
+<p>Fixture-only demonstration: one JSON harvest command before and after. No live farm or private multiplayer data.</p>
+<p><a class="page-link" href="./index.html?debug=1">Back to Farm Test</a> · <a class="page-link" href="./log.html">Diagnostic logs</a></p>
+</header><section class="frame inspection-frame" aria-label="R07 farm inspection">
+<div id="inspect-status" role="status">Loading fixture…</div>
+<div class="inspection-tabs" role="group" aria-label="Choose revision">
+<button type="button" data-inspect-view="before" aria-pressed="false">Before harvest</button>
+<button type="button" data-inspect-view="after" aria-pressed="true">After harvest</button></div>
+<p id="revision">Loading…</p>
+<div class="inspection-preview"><img id="inspect-diagram" alt="Loading farm SVG" width="370" height="327"></div>
+<div class="inspection-actions">
+<button type="button" id="copy-svg" disabled>Copy SVG source</button>
+<button type="button" id="copy-json" disabled>Copy JSON</button>
+<button type="button" id="copy-report" disabled>Copy diagnostic report</button>
+<button type="button" id="copy-link" disabled>Copy snapshot URL</button></div>
+<div class="inspection-links"><a class="page-link" id="direct-svg" href="./r07-p1-data/after.svg">Open SVG directly</a>
+<a class="page-link" id="direct-json" href="./r07-p1-data/after.json">Open JSON directly</a></div>
+<h2>AI-readable JSON</h2><pre id="inspect-json" tabindex="0">Loading…</pre></section>
+<footer class="inspection-note">Public test fixtures only. SVG and JSON come from the same R07-P0 state. No passwords, private player data, real-time session inspection or persistent saves.</footer>
+</main></body></html>

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "r07-p0/v1",
+  "source": "authoritative-fixture",
+  "worldMode": "farm",
+  "instanceId": "farm-a",
+  "revision": 0,
+  "width": 3,
+  "height": 2,
+  "plots": [
+    {
+      "id": "plot-one",
+      "parcelId": "parcel-origin",
+      "x": 0,
+      "y": 0,
+      "label": "Lucerne <test> & 'demo' \"field\"",
+      "cropId": "lucerne",
+      "cropStatus": "ready"
+    }
+  ],
+  "inventory": {
+    "lucerne": 0
+  },
+  "lastDecision": null
+}

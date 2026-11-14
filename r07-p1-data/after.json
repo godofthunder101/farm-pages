@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "r07-p0/v1",
+  "source": "authoritative-fixture",
+  "worldMode": "farm",
+  "instanceId": "farm-a",
+  "revision": 1,
+  "width": 3,
+  "height": 2,
+  "plots": [
+    {
+      "id": "plot-one",
+      "parcelId": "parcel-origin",
+      "x": 0,
+      "y": 0,
+      "label": "Lucerne <test> & 'demo' \"field\"",
+      "cropId": "lucerne",
+      "cropStatus": "harvested"
+    }
+  ],
+  "inventory": {
+    "lucerne": 2
+  },
+  "lastDecision": {
+    "schemaVersion": "r07-p0/v1",
+    "commandId": "cmd-demo",
+    "actorId": "helper-a",
+    "instanceId": "farm-a",
+    "outcome": "accepted",
+    "previousRevision": 0,
+    "revision": 1,
+    "auditSequence": 1,
+    "reasonCode": null,
+    "events": [
+      {
+        "kind": "farm.plot.harvested",
+        "plotId": "plot-one",
+        "cropId": "lucerne",
+        "quantity": 2
+      }
+    ]
+  }
+}
