@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test — R09-P3 First-Person 3D Dungeon</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+#app{max-width:1000px;padding:12px}
+.r09p2-head{margin-bottom:12px}
+.r09p2-head h1{font-size:clamp(1.5rem,5.2vw,2.3rem);margin:3px 0}
+.r09p2-head p{margin:6px 0;color:#b5d8b9;line-height:1.4}
+.r09p2-frame{padding:12px;border:1px solid #587b60;border-radius:14px;background:#163621}
+#status{border-radius:8px;padding:10px;min-height:45px;line-height:1.35;background:#244a2a}
+#status[data-outcome="rejected"]{background:#653830;color:#ffe2da}
+.r09p2-hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:9px 0}
+.r09p2-hud>div{background:#204b2d;padding:9px;border-radius:7px;min-width:0}
+.r09p2-hud small{display:block;color:#c4dfc8;font-size:.74rem}
+.r09p2-hud strong{display:block;font-size:1rem;overflow-wrap:anywhere}
+.r09p2-main{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(265px,1fr);gap:12px;align-items:start}
+.r09p2-scene{background:#0b161d;border-radius:10px;overflow:hidden;border:1px solid #6a8f73}
+.r09p2-scene img{display:block;width:100%;height:auto}
+.r09p2-scene p{font-size:.77rem;color:#bed7c5;padding:0 10px}
+.r09p2-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:10px}
+.r09p2-controls button{padding:10px 5px;min-height:49px;font-size:.86rem;font-weight:700}
+.r09p2-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:9px}
+.r09p2-actions button{padding:10px;min-height:44px;font-size:.88rem}
+.r09p2-actions label{font-size:.78rem;display:block;align-self:center}
+.r09p2-actions select{width:100%;padding:10px;border-radius:8px;color:#122819;background:#e9efd6}
+.r09p2-sub{font-size:.83rem;color:#bfd6c2;line-height:1.45;margin:7px 0}
+.r09p2-inspect{margin-top:13px}
+.r09p2-inspect summary{cursor:pointer;font-weight:700;padding:10px;background:#285037;border-radius:8px}
+.r09p2-inspect pre{background:#0b2116;border:1px solid #536f57;border-radius:8px;padding:10px;font-size:.74rem;white-space:pre-wrap;overflow-wrap:anywhere;max-height:250px;overflow:auto}
+.r09p2-inspect img{display:block;width:100%;height:auto;background:white;border-radius:6px}
+#action-history{padding-left:20px;font-size:.8rem;color:#d6e8d8;line-height:1.55;overflow-wrap:anywhere;max-height:110px;overflow:auto}
+#action-history [data-outcome="rejected"]{color:#ffb8a8}
+.r09p2-footer{margin-top:12px;font-size:.82rem;color:#b9d2be}
+#webgl-scene{position:relative}
+#webgl-canvas{display:block;width:100%;height:auto;aspect-ratio:8/5;background:#111b27;touch-action:manipulation}
+#farm-overlay{position:absolute;inset:0;display:grid;place-items:center;background:#132719eb;text-align:center;padding:15px}
+#farm-overlay[hidden],#gl-fallback[hidden]{display:none}
+#farm-overlay strong{display:block;font-size:1.25rem;margin-bottom:7px}
+#gl-status{font-size:.76rem;line-height:1.35;padding:8px 12px;color:#d3e6df}
+#gl-fallback{font-size:.85rem;background:#492c30;padding:12px;color:#ffe9e4}
+#gl-fallback a{color:#d6f6b7}
+.r09p3-badge{display:inline-block;padding:2px 7px;border:1px solid #708878;border-radius:12px;font-size:.72rem}
+@media(max-width:730px){.r09p2-main{grid-template-columns:minmax(0,1fr)}.r09p2-hud{grid-template-columns:repeat(2,minmax(0,1fr))}.r09p2-frame{padding:8px}}
+</style>
+<script type="module" src="./r09-3d.js"></script>
+</head>
+<body>
+<main id="app">
+<header class="r09p2-head">
+<small>R09-P3 · TRUE WEBGL 3D · LOCAL TEST FIXTURE</small>
+<h1>First-person dungeon</h1>
+<p>Explore a real depth-tested 3D dungeon using the same verified one-tile movement, quarter-turns, cards, chest loot and combat reducer.</p>
+<p><a class="page-link" href="./r09-play.html">R09-P2 schematic fallback</a> · <a class="page-link" href="./r09-inspect.html?stage=engaged">R09-P1 static inspector</a></p>
+</header>
+<section class="r09p2-frame" aria-label="Interactive dungeon">
+<div id="status" role="status" aria-live="polite">Loading interactive fixture…</div>
+<div class="r09p2-hud">
+<div><small>Mode / revision</small><strong><span id="mode">Loading</span> · <span id="revision">—</span></strong></div>
+<div><small>Stamina</small><strong id="stamina">—</strong></div>
+<div><small>Position / facing</small><strong id="position">—</strong></div>
+<div><small>Hand</small><strong id="hand-count">—</strong></div>
+</div>
+<div class="r09p2-main">
+<div>
+<div class="r09p2-scene" id="webgl-scene">
+<canvas id="webgl-canvas" width="480" height="300" aria-label="3D first-person dungeon viewport">Your browser requires WebGL to render the dungeon.</canvas>
+<div id="farm-overlay" hidden><div><strong>Back on the farm</strong>Choose Enter dungeon to see the 3D corridors. Your farm state remains inspectable below.</div></div>
+<div id="gl-status" role="status">Initializing the 3D renderer…</div>
+<div id="gl-fallback" hidden>WebGL rendering unavailable. You can still inspect the game state here, or <a href="./r09-play.html">play the accepted R09-P2 schematic version</a>.</div>
+</div>
+<div class="r09p2-inspect">
+<details>
+<summary>Show live overhead SVG / JSON inspection</summary>
+<img id="inspect-diagram" alt="Live overhead semantic dungeon SVG" width="380" height="389">
+<pre id="inspect-json" tabindex="0">Loading state…</pre>
+</details>
+</div>
+</div>
+<div>
+<div class="r09p2-controls" role="group" aria-label="Dungeon movement">
+<div></div><button data-action="dungeon.move.forward" type="button">↑ Forward</button><div></div>
+<button data-action="dungeon.turn.left" type="button">↶ Turn left</button>
+<button data-action="dungeon.move.backward" type="button">↓ Back</button>
+<button data-action="dungeon.turn.right" type="button">Turn right ↷</button>
+</div>
+<div class="r09p2-actions" role="group" aria-label="Dungeon interactions">
+<button data-action="dungeon.enter" type="button">Enter dungeon</button>
+<button data-action="dungeon.chest.open" type="button">Open chest</button>
+<button data-action="dungeon.attack.basic" type="button">Basic attack</button>
+<button data-action="dungeon.card.use" type="button">Play card</button>
+<label for="hand-select">Choose hand card</label>
+<select id="hand-select" aria-label="Card to play"><option value="">No cards</option></select>
+<button data-action="farm.return" type="button">Return to farm</button>
+<button data-action="farm.recover" type="button">Recover stamina</button>
+<button id="reset-demo" type="button">Reset demo</button>
+<button id="copy-report" type="button">Copy AI report</button>
+</div>
+<p class="r09p2-sub">Encounter: <strong id="encounter">—</strong> · Enemy: <strong id="enemy">—</strong> · Chest: <strong id="chest">—</strong></p>
+<p class="r09p2-sub">Gold: <strong id="gold">—</strong> · <span id="deck-discard">Deck: —</span></p>
+<p class="r09p2-sub" id="farm-context">Farm status loading…</p>
+<details>
+<summary>Recent command results</summary>
+<ol id="action-history" aria-label="Recent accepted and rejected commands"><li>Loading…</li></ol>
+</details>
+</div>
+</div>
+</section>
+<footer class="r09p2-footer">WebGL1 3D browser-local prototype, not a production game. State resets on reload; the test farm purchase is pre-applied. The game rules are the unchanged accepted R09 reducer. Stone walls and low-poly chest/enemy are temporary generated geometry, not finished assets. No shared session, authentication, persistent save, procedurally generated dungeon or approved final balance. The expandable JSON and overhead SVG come from the same in-memory state as the 3D renderer.</footer>
+</main>
+</body>
+</html>

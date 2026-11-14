@@ -29,3 +29,7 @@ GitHub Pages source: `main` branch, `/(root)`. Compiled files are pushed directl
 ## R09-P2 — Playable local dungeon test (interactive, no backend)
 
 [Open R09-P2 dungeon controls](https://godofthunder101.github.io/farm-pages/r09-play.html) to use touch buttons for forward/backward one tile, left/right quarter turns, chest loot, card attacks, basic combat, stamina and return-to-farm. Unlike the prerecorded R09-P1 inspector, R09-P2 submits **real commands against the compiled R09-P0 reducer in the browser's own memory**, with live SVG/JSON and a copyable AI report. This is a synthetic fixture only; it does **not** implement server-authoritative co-op, durable saves, final balance or WebGL. Source proven in private `farm-test` commit `7242a65df41f332a00ef061e7747394c98544356`.
+
+## R09-P3 — WebGL first-person dungeon view
+
+[Play the 3D dungeon test](https://godofthunder101.github.io/farm-pages/r09-3d.html). A separate **native WebGL1** presentation of the same R09-P2 browser-local dungeon rules: true perspective walls/floors/ceilings with depth testing, low-poly chest/enemy, one-step movement and 90° turning, combat/stamina/cards, and expandable live JSON/SVG. It is **not** procedurally generated, an authenticated online dungeon, finished art, or a replacement for [the owner-accepted R09-P2 schematic version](https://godofthunder101.github.io/farm-pages/r09-play.html). The source is pinned in private `farm-test` commit `317424324d10f602bb8ac345c51b9b1e27e38bec`; the public WebGL page remains subject to owner visual acceptance. No Railway change.
