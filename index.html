@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test — Trial 001</title>
+<link rel="stylesheet" href="./styles.css"><script type="module" src="./app.js"></script>
+</head>
+<body>
+<main id="app">
+<header><small>PHONE-ONLY / TYPESCRIPT / TRIAL 001</small><h1>Farm Test</h1><p>Disposable touch-test — not the original game.</p></header>
+<section class="frame"><div id="status" role="status">Waiting for access word</div><canvas id="field" width="720" height="480" aria-label="Tap the grid to plant after unlocking"></canvas></section>
+<div class="controls"><button id="reset" disabled>Reset field</button><span>Once unlocked, tap the grid to plant.</span></div>
+<section id="debug" hidden><strong>AI inspection state</strong> <button id="copy">Copy JSON</button><pre id="state"></pre></section>
+<footer>Build trial-001 · Private source: farm-test · Public output: farm-pages</footer>
+</main>
+<div id="gate" class="overlay" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+<form id="word-form" class="modal"><div class="symbol">🔒</div><small>INTERACTION GATE</small><h2 id="gate-title">Enter the access word</h2><p>The site is public. This word only unlocks interaction in this test.</p><label for="word">Access word</label><input id="word" type="password" required autocomplete="off" autocapitalize="none" spellcheck="false"><button id="unlock" type="submit">Unlock test</button><p id="error" role="status"></p><small>Not real authentication. Do not store private data here.</small></form>
+</div>
+</body>
+</html>
