@@ -25,3 +25,7 @@ GitHub Pages source: `main` branch, `/(root)`. Compiled files are pushed directl
 ## R09-P1 — Dungeon replay SVG/JSON inspector
 
 [Open R09-P1 dungeon inspection](https://godofthunder101.github.io/farm-pages/r09-inspect.html?stage=engaged) to review **11 synthetic snapshots** in a single farm→dungeon→farm replay: 90-degree facing, hand/deck, loot chest, enemy engagement, basic strike, zero stamina, farm return and recovery. The [full 17-command replay report](https://godofthunder101.github.io/farm-pages/r09-p1-data/replay-report.json) is static test data. This is **read-only fixture inspection**, not live WebGL/multiplayer or a deployed dungeon engine; original source is in private `farm-test`.
+
+## R09-P2 — Playable local dungeon test (interactive, no backend)
+
+[Open R09-P2 dungeon controls](https://godofthunder101.github.io/farm-pages/r09-play.html) to use touch buttons for forward/backward one tile, left/right quarter turns, chest loot, card attacks, basic combat, stamina and return-to-farm. Unlike the prerecorded R09-P1 inspector, R09-P2 submits **real commands against the compiled R09-P0 reducer in the browser's own memory**, with live SVG/JSON and a copyable AI report. This is a synthetic fixture only; it does **not** implement server-authoritative co-op, durable saves, final balance or WebGL. Source proven in private `farm-test` commit `7242a65df41f332a00ef061e7747394c98544356`.

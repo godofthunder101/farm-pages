@@ -1,0 +1,399 @@
+{
+  "schemaVersion": "r09-p0/v1",
+  "farmFixture": {
+    "schemaVersion": "r08-p0/v1",
+    "farms": [
+      {
+        "schemaVersion": "r07-p0/v1",
+        "instanceId": "farm-a",
+        "revision": 0,
+        "width": 3,
+        "height": 2,
+        "plots": [
+          {
+            "id": "plot-one",
+            "parcelId": "parcel-origin",
+            "x": 0,
+            "y": 0,
+            "label": "Lucerne <test> & 'demo' \"field\"",
+            "cropId": "lucerne",
+            "cropStatus": "ready",
+            "yieldQuantity": 2
+          }
+        ],
+        "inventory": {
+          "lucerne": 0
+        }
+      },
+      {
+        "schemaVersion": "r07-p0/v1",
+        "instanceId": "farm-b",
+        "revision": 0,
+        "width": 3,
+        "height": 2,
+        "plots": [
+          {
+            "id": "plot-two",
+            "parcelId": "parcel-origin",
+            "x": 0,
+            "y": 0,
+            "label": "Other farm",
+            "cropId": "lucerne",
+            "cropStatus": "ready",
+            "yieldQuantity": 1
+          }
+        ],
+        "inventory": {
+          "lucerne": 0
+        }
+      }
+    ],
+    "grants": [
+      {
+        "actorId": "owner-a",
+        "instanceId": "farm-a",
+        "role": "owner"
+      },
+      {
+        "actorId": "helper-a",
+        "instanceId": "farm-a",
+        "role": "helper"
+      },
+      {
+        "actorId": "owner-b",
+        "instanceId": "farm-b",
+        "role": "owner"
+      }
+    ],
+    "economies": [
+      {
+        "instanceId": "farm-a",
+        "gold": 0,
+        "parcels": [
+          {
+            "id": "parcel-origin",
+            "x": 0,
+            "y": 0,
+            "biomeId": "biome.neutral",
+            "owned": true,
+            "purchasePrice": null,
+            "features": []
+          },
+          {
+            "id": "parcel-east",
+            "x": 1,
+            "y": 0,
+            "biomeId": "biome.neutral",
+            "owned": false,
+            "purchasePrice": 10,
+            "features": [
+              {
+                "id": "entrance-one",
+                "kind": "dungeon-entrance",
+                "dungeonDefinitionId": "dungeon-probe"
+              }
+            ]
+          },
+          {
+            "id": "parcel-far",
+            "x": 3,
+            "y": 0,
+            "biomeId": "biome.neutral",
+            "owned": false,
+            "purchasePrice": 5,
+            "features": []
+          }
+        ],
+        "orders": [
+          {
+            "id": "order-one",
+            "productId": "lucerne",
+            "quantity": 2,
+            "rewardGold": 10,
+            "status": "open"
+          }
+        ]
+      },
+      {
+        "instanceId": "farm-b",
+        "gold": 0,
+        "parcels": [
+          {
+            "id": "parcel-origin",
+            "x": 0,
+            "y": 0,
+            "biomeId": "biome.neutral",
+            "owned": true,
+            "purchasePrice": null,
+            "features": []
+          }
+        ],
+        "orders": []
+      }
+    ],
+    "commands": [
+      {
+        "schemaVersion": "r08-p0/v1",
+        "commandId": "cmd-harvest",
+        "actorId": "helper-a",
+        "instanceId": "farm-a",
+        "expectedRevision": 0,
+        "action": "farm.plot.harvest",
+        "plotId": "plot-one"
+      },
+      {
+        "schemaVersion": "r08-p0/v1",
+        "commandId": "cmd-order",
+        "actorId": "owner-a",
+        "instanceId": "farm-a",
+        "expectedRevision": 1,
+        "action": "market.order.fulfil",
+        "orderId": "order-one"
+      },
+      {
+        "schemaVersion": "r08-p0/v1",
+        "commandId": "cmd-purchase",
+        "actorId": "owner-a",
+        "instanceId": "farm-a",
+        "expectedRevision": 2,
+        "action": "farm.parcel.purchase",
+        "parcelId": "parcel-east"
+      }
+    ]
+  },
+  "players": [
+    {
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "farmerClassId": "farmer.placeholder",
+      "fighterClassId": "fighter.placeholder",
+      "mode": "farm",
+      "stamina": 8,
+      "maxStamina": 8,
+      "handLimit": 2,
+      "deck": [
+        "card.spark"
+      ],
+      "hand": [],
+      "discard": [],
+      "activeDungeonId": null,
+      "position": null,
+      "facing": null
+    }
+  ],
+  "dungeons": [
+    {
+      "instanceId": "dungeon-run-one",
+      "definitionId": "dungeon-probe",
+      "farmInstanceId": "farm-a",
+      "entranceId": "entrance-one",
+      "seed": "template-seed-001",
+      "width": 4,
+      "height": 3,
+      "walkable": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 3,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        },
+        {
+          "x": 1,
+          "y": 2
+        },
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "start": {
+        "x": 0,
+        "y": 1
+      },
+      "startFacing": "E",
+      "enemy": {
+        "id": "enemy-one",
+        "position": {
+          "x": 2,
+          "y": 1
+        },
+        "health": 3,
+        "maxHealth": 3,
+        "status": "alive"
+      },
+      "chest": {
+        "id": "chest-one",
+        "position": {
+          "x": 1,
+          "y": 0
+        },
+        "opened": false,
+        "lootCard": "card.echo"
+      },
+      "engaged": false,
+      "revision": 0
+    }
+  ],
+  "commands": [
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-01",
+      "actorId": "helper-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 0,
+      "action": "farm.plot.harvest",
+      "plotId": "plot-one"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-02",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 1,
+      "action": "market.order.fulfil",
+      "orderId": "order-one"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-03",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 2,
+      "action": "farm.parcel.purchase",
+      "parcelId": "parcel-east"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-04",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 3,
+      "action": "dungeon.enter",
+      "entranceId": "entrance-one"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-05",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 4,
+      "action": "dungeon.move.forward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-06",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 5,
+      "action": "dungeon.turn.left"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-07",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 6,
+      "action": "dungeon.move.forward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-08",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 7,
+      "action": "dungeon.chest.open",
+      "chestId": "chest-one"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-09",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 8,
+      "action": "dungeon.move.backward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-10",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 9,
+      "action": "dungeon.turn.right"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-11",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 10,
+      "action": "dungeon.move.forward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-12",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 11,
+      "action": "dungeon.card.use",
+      "cardId": "card.spark"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-13",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 12,
+      "action": "dungeon.attack.basic"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-14",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 13,
+      "action": "dungeon.move.forward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-15",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 14,
+      "action": "dungeon.move.backward"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-16",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 15,
+      "action": "farm.return"
+    },
+    {
+      "schemaVersion": "r09-p0/v1",
+      "commandId": "cmd-17",
+      "actorId": "owner-a",
+      "farmInstanceId": "farm-a",
+      "expectedRevision": 16,
+      "action": "farm.recover"
+    }
+  ]
+}
