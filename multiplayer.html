@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test — Multiplayer Trial 003</title><link rel="stylesheet" href="./styles.css"><script type="module" src="./multiplayer.js"></script></head>
+<body><main id="app">
+<header><small>PHONE-ONLY / BACKEND ↔ FRONTEND / TRIAL 003</small><h1>Multiplayer Lab</h1>
+<p>Two browsers, one room, server-owned markers. <a class="page-link" href="./index.html?debug=1">Back to farm</a> · <a class="page-link" href="./log.html">Logs</a></p></header>
+<section class="frame"><div id="mp-status" role="status">Backend not connected. Enter a hosted server URL below.</div>
+<canvas id="mp-field" width="720" height="480" aria-label="Tap to move your marker when connected"></canvas></section>
+<form id="mp-connect" class="mp-connection">
+<label for="server-url">Backend HTTPS address</label><input id="server-url" type="url" placeholder="https://your-server.example.com" required autocomplete="url">
+<div class="mp-inputs"><div><label for="room-code">Shared room code</label><input id="room-code" value="FARM" minlength="4" maxlength="8" required></div><div><label for="player-name">Your name</label><input id="player-name" value="Farmer" maxlength="18" required></div></div>
+<div class="controls"><button id="mp-join" type="submit">Join room</button><button id="mp-leave" type="button" disabled>Leave room</button></div>
+</form>
+<p id="mp-players">Players: none</p><section id="debug"><strong>Multiplayer state</strong> <button id="mp-copy-state">Copy JSON</button><pre id="mp-state"></pre></section>
+<footer>Server URL is saved locally in your browser. No backend has been provisioned by this page. Room codes are not private authentication.</footer>
+</main>
+<div id="mp-gate" class="overlay" role="dialog" aria-modal="true" aria-labelledby="mp-gate-title">
+<form id="mp-word-form" class="modal"><div class="symbol">🔒</div><small>TRIAL ACCESS GATE</small><h2 id="mp-gate-title">Enter the access word</h2><p>Same temporary word as the single-player test. Not real access control.</p>
+<label for="mp-word">Access word</label><input id="mp-word" type="password" required autocomplete="off" spellcheck="false" autocapitalize="none"><button id="mp-unlock" type="submit">Unlock multiplayer</button><p id="mp-gate-error" role="status"></p></form>
+</div></body></html>

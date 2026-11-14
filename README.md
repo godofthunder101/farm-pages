@@ -3,12 +3,13 @@
 This repository hosts the **public static deployment output** of the disposable phone-only Farm Test experiment.
 
 - Private editable TypeScript source: https://github.com/godofthunder101/farm-test
-- Live game: https://godofthunder101.github.io/farm-pages/
+- Live single-player game: https://godofthunder101.github.io/farm-pages/
 - Phone diagnostic viewer: https://godofthunder101.github.io/farm-pages/log.html
-- Current build: `trial-002`
+- Multiplayer capability frontend: https://godofthunder101.github.io/farm-pages/multiplayer.html
+- Current multiplayer build: `trial-003`
 
-The access word gate only controls normal in-app interaction; it does not provide true authentication. Do not publish secrets or private data here.
+The multiplayer page currently requires a separate HTTPS backend address. The backend code lives in `farm-test/backend`, but **a real Internet backend has not been deployed yet**.
 
-Logs live in each browser's localStorage, not GitHub Pages. Use the log viewer's **Copy text** or **Copy report URL** controls to explicitly share a snapshot. The report URL embeds log text in its query string and is visible to anyone with that URL.
+The access-word gate only controls ordinary in-app interaction, not real authentication. No private data belongs in the public repository. Browser logs remain local until shared.
 
-GitHub Pages source: `main` branch, `/(root)`. Files are compiled from the separate private TypeScript repository and pushed here through the GitHub connector; automatic cross-repository builds are not configured.
+GitHub Pages source: `main` branch, `/(root)`. Compiled files are pushed directly here using the GitHub connector. Automatic cross-repository deployment is not yet configured.
