@@ -1,4 +1,6 @@
+import { captureErrors, logEvent } from './diagnostics.js';
 /** Trial-only touch surface. No original game mechanics are implemented yet. */
+captureErrors();
 const SHA = '23fbb35c96a1f70d77d4524ba3cf7f388207d1d3c5490ef4070854a3e8dbcf21';
 const el = (id) => document.getElementById(id);
 const field = el('field');
@@ -10,7 +12,7 @@ let failed = 0;
 const query = new URLSearchParams(location.search);
 const seed = query.get('seed')?.slice(0, 64) || 'default';
 function state() {
-    return JSON.stringify({ build: 'trial-001', seed, unlocked, taps, failed, planted: [...planted].sort((a, b) => a - b), browser: navigator.userAgent }, null, 2);
+    return JSON.stringify({ build: 'trial-002', seed, unlocked, taps, failed, planted: [...planted].sort((a, b) => a - b), browser: navigator.userAgent }, null, 2);
 }
 function inspect() { el('state').textContent = state(); }
 function draw() {
@@ -43,14 +45,17 @@ el('word-form').addEventListener('submit', async (e) => {
             input.value = '';
             el('reset').disabled = false;
             el('status').textContent = 'Unlocked — tap the field';
+            logEvent('INFO', 'gate.unlocked');
         }
         else {
             failed++;
             el('error').textContent = 'Incorrect word. Try again.';
+            logEvent('WARN', 'gate.failed', `attempt ${failed}`);
         }
     }
-    catch {
+    catch (error) {
         el('error').textContent = 'Word checking needs HTTPS or localhost.';
+        logEvent('ERROR', 'gate.digest.failed', String(error));
     }
     button.disabled = false;
     inspect();
@@ -66,6 +71,7 @@ field.addEventListener('pointerdown', e => {
     taps++;
     draw();
     inspect();
+    logEvent('INFO', 'field.plant', `x=${x}, y=${y}, planted=${planted.size}`);
     el('status').textContent = `Unlocked — ${planted.size} planted squares`;
 });
 el('reset').addEventListener('click', () => {
@@ -76,6 +82,7 @@ el('reset').addEventListener('click', () => {
     draw();
     inspect();
     el('status').textContent = 'Field reset';
+    logEvent('INFO', 'field.reset');
 });
 el('copy').addEventListener('click', async () => {
     try {
@@ -89,4 +96,4 @@ el('copy').addEventListener('click', async () => {
 el('debug').hidden = query.get('debug') !== '1';
 draw();
 inspect();
-export {};
+logEvent('INFO', 'app.started', `build=trial-002, seed=${seed}`);

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test — Diagnostic Log</title>
+<link rel="stylesheet" href="./styles.css"><script type="module" src="./log-viewer.js"></script></head>
+<body><main id="app">
+<header><small>PHONE-ONLY / DIAGNOSTICS / TRIAL 002</small><h1>Diagnostic log</h1>
+<p><a class="page-link" href="./index.html?debug=1">Back to game</a></p>
+<p id="report-note">These logs live only in this phone's browser storage. They are not uploaded to GitHub or visible remotely until you copy/share them.</p></header>
+<section class="frame log-frame"><div id="status">Log viewer · <span id="count">0 entries</span></div>
+<div class="log-actions"><button id="refresh">Refresh</button><button id="copy-logs">Copy text</button><button id="share">Copy report URL</button><button id="download">Download .txt</button><button id="test-entry">Add test entry</button><button id="clear-logs" class="danger">Clear</button></div>
+<p id="result" role="status"></p><pre id="log-text" tabindex="0">Loading…</pre></section>
+<footer>Most recent 120 entries are retained per browser. Do not enter passwords or private data into diagnostic descriptions. A copied report URL contains a snapshot of its log data and can be read by anyone with that URL.</footer>
+</main></body></html>
