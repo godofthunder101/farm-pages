@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test R10-P0 — Farm to Dungeon 3D</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+#app{max-width:1060px;margin:0 auto;padding:12px}
+.hero{margin:0 0 13px}
+.hero h1{font-size:clamp(1.6rem,5vw,2.5rem);margin:4px 0}
+.hero p{margin:6px 0;line-height:1.45;color:#c6dfcb}
+#stage{background:#142e23;border:1px solid #52775e;border-radius:15px;padding:12px}
+#status{margin:0 0 12px;border-radius:9px;padding:11px 13px;background:#27553b;min-height:45px;font-size:.94rem;line-height:1.35}
+#status[data-outcome="rejected"]{background:#593b37;color:#ffe3d5}
+.hud{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin-bottom:12px}
+.hud>div{padding:10px 8px;background:#245036;border-radius:9px;min-width:0}
+.hud small{display:block;color:#c0dec9;font-size:.73rem}
+.hud strong{display:block;font-size:1.02rem;overflow-wrap:anywhere}
+.columns{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(285px,1fr);gap:14px;align-items:start}
+.viewport{border:1px solid #708c79;background:#0a151d;border-radius:12px;overflow:hidden}
+#world-canvas{display:block;width:100%;height:auto;aspect-ratio:8/5;background:#101b25}
+#render-status{padding:9px 12px;font-size:.81rem;color:#c8e2d5;min-height:36px}
+#render-fallback{padding:12px;background:#513a37;color:#ffe4dc}
+#render-fallback[hidden],[hidden]{display:none!important}
+.panel{padding:11px;border:1px solid #45634e;border-radius:12px;background:#193b2b;margin-bottom:11px}
+.panel h2{font-size:1.05rem;margin:2px 0 10px}
+.action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.action-grid button,.controls button,.utilities button{padding:10px 6px;min-height:47px;font-weight:700;font-size:.87rem}
+.action-grid button:disabled,.controls button:disabled{opacity:.4}
+#farm-details,#dungeon-details{margin-top:10px;font-size:.84rem;color:#d0e3d2;line-height:1.45}
+#farm-details p,#dungeon-details p{margin:5px 0}
+.progress{margin:0 0 12px;padding:10px;border:1px solid #4d7359;background:#1d4830;border-radius:9px;font-size:.86rem;line-height:1.5}
+.progress strong{color:#e5f6c8}
+.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 10px}
+.controls button{min-height:52px}
+#card-select{width:100%;padding:10px;color:#132817;background:#f2f2dc;border-radius:7px}
+label[for="card-select"]{font-size:.85rem;color:#d5ebd6;display:block;margin:10px 0 4px}
+.utilities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px}
+.inspect{margin-top:13px}
+.inspect summary{cursor:pointer;background:#2c563c;padding:10px;border-radius:8px;font-weight:700}
+.inspect img{display:block;width:100%;height:auto;background:white;border-radius:7px}
+.inspect pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d251b;border:1px solid #487253;padding:10px;border-radius:7px;max-height:280px;overflow:auto;font-size:.73rem}
+#action-history{padding-left:23px;font-size:.82rem;line-height:1.5;overflow-wrap:anywhere;max-height:190px;overflow-y:auto}
+#action-history li[data-outcome="rejected"]{color:#ffc1a8}
+.footer{color:#b8d1bc;font-size:.83rem;margin:14px 1px 2px;line-height:1.5}
+a{color:#bde6cc}
+@media(max-width:770px){.columns{grid-template-columns:1fr}.hud{grid-template-columns:repeat(3,minmax(0,1fr))}#stage{padding:9px}}
+@media(max-width:390px){.hud{grid-template-columns:repeat(2,minmax(0,1fr))}.action-grid button{font-size:.8rem}}
+</style>
+<script type="module" src="./r10-play.js"></script>
+</head>
+<body>
+<main id="app">
+<header class="hero">
+<small>R10-P0 · ONE BROWSER-LOCAL WORLD · TWO 3D PRESENTATIONS</small>
+<h1>From farm to dungeon</h1>
+<p>Harvest the ready crop, fulfil the market order, buy neighbouring land, and discover a dungeon entrance. Everything below is driven by the same JSON simulation—no prerecorded stage switching.</p>
+<p><a href="./r09-3d.html">Accepted R09-P3 dungeon-only prototype</a> · <a href="./r09-inspect.html?stage=engaged">Semantic inspection reference</a></p>
+</header>
+<section id="stage" aria-label="Integrated farm and dungeon prototype">
+<div id="status" role="status" aria-live="polite">Loading simulation fixture…</div>
+<div class="hud">
+<div><small>World revision</small><strong id="revision">—</strong></div>
+<div><small>Current mode</small><strong id="mode">—</strong></div>
+<div><small>Farm revision</small><strong id="farm-revision">—</strong></div>
+<div><small>Gold</small><strong id="gold">—</strong></div>
+<div><small>Lucerne</small><strong id="lucerne">—</strong></div>
+<div><small>Stamina</small><strong id="stamina">—</strong></div>
+</div>
+<div class="columns">
+<div>
+<div class="viewport">
+<canvas id="world-canvas" width="640" height="400" aria-label="Isometric WebGL farm and first-person dungeon">WebGL is required for this 3D presentation.</canvas>
+<div id="render-status" role="status">Initializing WebGL renderer…</div>
+<div id="render-fallback" hidden>3D unavailable on this device. Game state remains inspectable below. You can also use the <a href="./r09-play.html">accepted R09-P2 schematic dungeon</a>.</div>
+</div>
+<div class="inspect">
+<details>
+<summary>Inspect live overhead SVG and world JSON</summary>
+<img id="inspect-diagram" alt="Semantic map of current farm or dungeon state" width="728" height="389">
+<pre id="inspect-json" tabindex="0">Loading…</pre>
+</details>
+</div>
+</div>
+<div>
+<div class="progress" id="progress" aria-live="polite">Farm progress loading…</div>
+<section class="panel" id="farm-panel" aria-label="Farm actions">
+<h2>Farm actions</h2>
+<div class="action-grid">
+<button type="button" data-action="farm.plot.harvest">Harvest lucerne</button>
+<button type="button" data-action="market.order.fulfil">Fulfil market order</button>
+<button type="button" data-action="farm.parcel.purchase">Buy east parcel</button>
+<button type="button" data-action="dungeon.enter">Enter dungeon</button>
+<button type="button" data-action="farm.recover">Recover stamina</button>
+</div>
+<div id="farm-details">Farm inventory and entrances loading…</div>
+</section>
+<section class="panel" id="dungeon-panel" aria-label="Dungeon actions" hidden>
+<h2>Dungeon controls</h2>
+<div class="controls">
+<div></div><button type="button" data-action="dungeon.move.forward">↑ Forward</button><div></div>
+<button type="button" data-action="dungeon.turn.left">↶ Turn left</button>
+<button type="button" data-action="dungeon.move.backward">↓ Back</button>
+<button type="button" data-action="dungeon.turn.right">Turn right ↷</button>
+</div>
+<div class="action-grid">
+<button type="button" data-action="dungeon.chest.open">Open chest</button>
+<button type="button" data-action="dungeon.attack.basic">Basic attack</button>
+<button type="button" data-action="dungeon.card.use">Play card</button>
+<button type="button" data-action="farm.return">Return to farm</button>
+</div>
+<label for="card-select">Card from hand</label>
+<select id="card-select" aria-label="Select a card to play"><option value="">No cards</option></select>
+<div id="dungeon-details">Dungeon details loading…</div>
+</section>
+<div class="utilities">
+<button type="button" id="reset-demo">Reset entire world</button>
+<button type="button" id="copy-report">Copy AI report</button>
+</div>
+<details>
+<summary>Recent command results (accepted and rejected)</summary>
+<ol id="action-history"><li>No actions yet</li></ol>
+</details>
+</div>
+</div>
+</section>
+<p class="footer">R10-P0 is a small synthetic fixture test, not a released game. The order, prices, stamina, card rewards, free dungeon return and one permanent test crop are not approved production balance. The 3D farm uses generated placeholder parcels and crops, not an authored asset pipeline. Reload/Reset starts from revision 0; there are no saved accounts, procedural worlds, Railway gameplay services or live co-op. The WebGL views are projections of the same authoritative in-memory reducer and can be checked against the semantic SVG/JSON.</p>
+</main>
+</body></html>
