@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "r09-p0/v1",
+  "source": "deterministic-fixture",
+  "revision": 8,
+  "farmInstanceId": "farm-a",
+  "mode": "dungeon",
+  "player": {
+    "actorId": "owner-a",
+    "farmInstanceId": "farm-a",
+    "farmerClassId": "farmer.placeholder",
+    "fighterClassId": "fighter.placeholder",
+    "mode": "dungeon",
+    "stamina": 5,
+    "maxStamina": 8,
+    "handLimit": 2,
+    "deck": [
+      "card.echo"
+    ],
+    "hand": [
+      "card.spark"
+    ],
+    "discard": [],
+    "activeDungeonId": "dungeon-run-one",
+    "position": {
+      "x": 1,
+      "y": 0
+    },
+    "facing": "N"
+  },
+  "farm": {
+    "schemaVersion": "r08-p0/v1",
+    "source": "deterministic-fixture",
+    "instanceId": "farm-a",
+    "revision": 3,
+    "worldMode": "farm",
+    "gold": 0,
+    "plots": [
+      {
+        "id": "plot-one",
+        "parcelId": "parcel-origin",
+        "x": 0,
+        "y": 0,
+        "label": "Lucerne <test> & 'demo' \"field\"",
+        "cropId": "lucerne",
+        "cropStatus": "harvested"
+      }
+    ],
+    "inventory": {
+      "lucerne": 0
+    },
+    "parcels": [
+      {
+        "id": "parcel-east",
+        "x": 1,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": true,
+        "purchasePrice": 10,
+        "features": [
+          {
+            "id": "entrance-one",
+            "kind": "dungeon-entrance",
+            "dungeonDefinitionId": "dungeon-probe"
+          }
+        ]
+      },
+      {
+        "id": "parcel-far",
+        "x": 3,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": false,
+        "purchasePrice": 5,
+        "features": []
+      },
+      {
+        "id": "parcel-origin",
+        "x": 0,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": true,
+        "purchasePrice": null,
+        "features": []
+      }
+    ],
+    "orders": [
+      {
+        "id": "order-one",
+        "productId": "lucerne",
+        "quantity": 2,
+        "rewardGold": 10,
+        "status": "fulfilled"
+      }
+    ],
+    "availableEntrances": [
+      {
+        "id": "entrance-one",
+        "kind": "dungeon-entrance",
+        "dungeonDefinitionId": "dungeon-probe"
+      }
+    ],
+    "lastDecision": {
+      "schemaVersion": "r08-p0/v1",
+      "commandId": "cmd-03",
+      "actorId": "owner-a",
+      "instanceId": "farm-a",
+      "action": "farm.parcel.purchase",
+      "outcome": "accepted",
+      "previousRevision": 2,
+      "revision": 3,
+      "auditSequence": 3,
+      "reasonCode": null,
+      "events": [
+        {
+          "kind": "farm.parcel.purchased",
+          "parcelId": "parcel-east",
+          "costGold": 10
+        },
+        {
+          "kind": "farm.gold.changed",
+          "delta": -10,
+          "newGold": 0
+        },
+        {
+          "kind": "farm.feature.discovered",
+          "parcelId": "parcel-east",
+          "featureId": "entrance-one",
+          "featureKind": "dungeon-entrance"
+        }
+      ]
+    }
+  },
+  "dungeon": {
+    "instanceId": "dungeon-run-one",
+    "definitionId": "dungeon-probe",
+    "farmInstanceId": "farm-a",
+    "entranceId": "entrance-one",
+    "seed": "template-seed-001",
+    "width": 4,
+    "height": 3,
+    "walkable": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 0
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 2
+      }
+    ],
+    "start": {
+      "x": 0,
+      "y": 1
+    },
+    "startFacing": "E",
+    "enemy": {
+      "id": "enemy-one",
+      "position": {
+        "x": 2,
+        "y": 1
+      },
+      "health": 3,
+      "maxHealth": 3,
+      "status": "alive"
+    },
+    "chest": {
+      "id": "chest-one",
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "opened": true,
+      "lootCard": "card.echo"
+    },
+    "engaged": false,
+    "revision": 5
+  },
+  "lastDecision": {
+    "schemaVersion": "r09-p0/v1",
+    "commandId": "cmd-08",
+    "actorId": "owner-a",
+    "farmInstanceId": "farm-a",
+    "action": "dungeon.chest.open",
+    "outcome": "accepted",
+    "previousRevision": 7,
+    "revision": 8,
+    "auditSequence": 8,
+    "reasonCode": null,
+    "events": [
+      {
+        "kind": "dungeon.chest.opened",
+        "chestId": "chest-one"
+      },
+      {
+        "kind": "dungeon.loot.card-acquired",
+        "cardId": "card.echo",
+        "remainingStamina": 5
+      }
+    ]
+  }
+}

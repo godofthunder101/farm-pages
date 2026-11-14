@@ -21,3 +21,7 @@ GitHub Pages source: `main` branch, `/(root)`. Compiled files are pushed directl
 ## R08-P1 — Four-stage static farm progression inspector
 
 [Open R08-P1 farm inspector](https://godofthunder101.github.io/farm-pages/r08-inspect.html?stage=land-purchased) to explore four public fixture snapshots: initial farm, harvested crop, paid market order, and newly purchased parcel revealing `entrance-one`. This page uses JSON/SVG generated from the private R08-P0 simulation and is entirely **read-only**. No Railway or player data is exposed.
+
+## R09-P1 — Dungeon replay SVG/JSON inspector
+
+[Open R09-P1 dungeon inspection](https://godofthunder101.github.io/farm-pages/r09-inspect.html?stage=engaged) to review **11 synthetic snapshots** in a single farm→dungeon→farm replay: 90-degree facing, hand/deck, loot chest, enemy engagement, basic strike, zero stamina, farm return and recovery. The [full 17-command replay report](https://godofthunder101.github.io/farm-pages/r09-p1-data/replay-report.json) is static test data. This is **read-only fixture inspection**, not live WebGL/multiplayer or a deployed dungeon engine; original source is in private `farm-test`.

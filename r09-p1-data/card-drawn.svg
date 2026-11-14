@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 389" role="img">
+<title>R09 dungeon dungeon-run-one</title>
+<desc>Revision 5; first-person grid inspection represented top-down</desc>
+<rect width="100%" height="100%" fill="white"/>
+<text x="18" y="25" font-size="17">Dungeon dungeon-run-one | revision 5</text>
+<text x="18" y="49" font-size="13">Stamina 7/8 | Hand 1/2 | Facing E</text>
+<text x="18" y="70" font-size="13">Encounter clear | Enemy 3 HP | Chest closed</text>
+<text x="18" y="90" font-size="12">Deck 0 | Discard 0</text>
+<g id="dungeon-grid"><rect id="cell-0-0" data-kind="wall" x="26" y="115" width="82" height="82" fill="#424a53" stroke="#888"/>
+<rect id="cell-1-0" data-kind="floor" x="108" y="115" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-2-0" data-kind="wall" x="190" y="115" width="82" height="82" fill="#424a53" stroke="#888"/>
+<rect id="cell-3-0" data-kind="wall" x="272" y="115" width="82" height="82" fill="#424a53" stroke="#888"/>
+<rect id="cell-0-1" data-kind="floor" x="26" y="197" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-1-1" data-kind="floor" x="108" y="197" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-2-1" data-kind="floor" x="190" y="197" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-3-1" data-kind="floor" x="272" y="197" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-0-2" data-kind="wall" x="26" y="279" width="82" height="82" fill="#424a53" stroke="#888"/>
+<rect id="cell-1-2" data-kind="floor" x="108" y="279" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-2-2" data-kind="floor" x="190" y="279" width="82" height="82" fill="#e3e9d9" stroke="#888"/>
+<rect id="cell-3-2" data-kind="floor" x="272" y="279" width="82" height="82" fill="#e3e9d9" stroke="#888"/></g>
+<g id="chest-chest-one" data-kind="loot-chest" data-status="closed">
+<title>Chest chest-one</title>
+<rect x="135" y="142" width="28" height="28" fill="#bc8730"/></g>
+<g id="enemy-enemy-one" data-kind="enemy" data-status="alive">
+<title>Enemy enemy-one 3 HP</title>
+<circle cx="231" cy="238" r="17" fill="#bf5555" /></g>
+<g id="player-owner-a" data-kind="player" data-facing="E">
+<title>Player owner-a facing E</title>
+<text x="132" y="248" font-size="30" fill="#16509e">→</text></g>
+</svg>

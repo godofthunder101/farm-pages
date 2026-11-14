@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "r09-p0/v1",
+  "source": "deterministic-fixture",
+  "revision": 0,
+  "farmInstanceId": "farm-a",
+  "mode": "farm",
+  "player": {
+    "actorId": "owner-a",
+    "farmInstanceId": "farm-a",
+    "farmerClassId": "farmer.placeholder",
+    "fighterClassId": "fighter.placeholder",
+    "mode": "farm",
+    "stamina": 8,
+    "maxStamina": 8,
+    "handLimit": 2,
+    "deck": [
+      "card.spark"
+    ],
+    "hand": [],
+    "discard": [],
+    "activeDungeonId": null,
+    "position": null,
+    "facing": null
+  },
+  "farm": {
+    "schemaVersion": "r08-p0/v1",
+    "source": "deterministic-fixture",
+    "instanceId": "farm-a",
+    "revision": 0,
+    "worldMode": "farm",
+    "gold": 0,
+    "plots": [
+      {
+        "id": "plot-one",
+        "parcelId": "parcel-origin",
+        "x": 0,
+        "y": 0,
+        "label": "Lucerne <test> & 'demo' \"field\"",
+        "cropId": "lucerne",
+        "cropStatus": "ready"
+      }
+    ],
+    "inventory": {
+      "lucerne": 0
+    },
+    "parcels": [
+      {
+        "id": "parcel-east",
+        "x": 1,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": false,
+        "purchasePrice": 10,
+        "features": []
+      },
+      {
+        "id": "parcel-far",
+        "x": 3,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": false,
+        "purchasePrice": 5,
+        "features": []
+      },
+      {
+        "id": "parcel-origin",
+        "x": 0,
+        "y": 0,
+        "biomeId": "biome.neutral",
+        "owned": true,
+        "purchasePrice": null,
+        "features": []
+      }
+    ],
+    "orders": [
+      {
+        "id": "order-one",
+        "productId": "lucerne",
+        "quantity": 2,
+        "rewardGold": 10,
+        "status": "open"
+      }
+    ],
+    "availableEntrances": [],
+    "lastDecision": null
+  },
+  "dungeon": null,
+  "lastDecision": null
+}
