@@ -1,5 +1,22 @@
 import { SHADERS } from "../r09-p3/renderer.js";
-import { buildFarmMesh, farmOrtho, farmViewMatrix, FARM_EYE } from "./farm-scene.js";
+import { buildFarmMesh, farmOrtho, farmViewMatrix } from "./farm-scene.js";
+export const FARM_LIGHTING_VERSION = "daylight-v1";
+export const FARM_DAYLIGHT_FRAGMENT_SHADER = [
+    "precision mediump float;",
+    "varying vec3 vNormal;",
+    "varying vec3 vColor;",
+    "varying float vMaterial;",
+    "void main(){",
+    " // Outdoor ambient and directional daylight shading.",
+    " vec3 n=normalize(vNormal);",
+    " float sun=max(0.0,dot(n,normalize(vec3(-0.55,0.88,0.35))));",
+    " float light=0.98+0.52*sun;",
+    " light+=0.02*step(2.5,vMaterial);",
+    " vec3 rgb=vColor*light+vec3(0.085,0.095,0.073);",
+    " rgb=pow(clamp(rgb,0.0,1.0),vec3(0.83));",
+    " gl_FragColor=vec4(rgb,1.0);",
+    "}"
+].join("\n");
 function compile(gl, type, source) {
     const shader = gl.createShader(type);
     if (!shader)
@@ -15,7 +32,7 @@ function compile(gl, type, source) {
 }
 function createProgram(gl) {
     const v = compile(gl, gl.VERTEX_SHADER, SHADERS.vertex);
-    const f = compile(gl, gl.FRAGMENT_SHADER, SHADERS.fragment);
+    const f = compile(gl, gl.FRAGMENT_SHADER, FARM_DAYLIGHT_FRAGMENT_SHADER);
     const prog = gl.createProgram();
     if (!prog)
         throw Error("FARM_WEBGL_PROGRAM_ALLOC");
@@ -32,13 +49,13 @@ function createProgram(gl) {
     return prog;
 }
 export class FarmWebGL {
-    canvas;
     gl;
     program;
     buffer;
     attribute;
     uniform;
     lost = false;
+    canvas;
     constructor(canvas) {
         this.canvas = canvas;
         const gl = canvas.getContext("webgl", { alpha: false, antialias: true, depth: true,
@@ -65,7 +82,7 @@ export class FarmWebGL {
         };
         this.attribute = { position: attr("aPosition"), normal: attr("aNormal"),
             color: attr("aColor"), material: attr("aMaterial") };
-        this.uniform = { projection: uni("uProjection"), view: uni("uView"), eye: uni("uEye") };
+        this.uniform = { projection: uni("uProjection"), view: uni("uView") };
         canvas.addEventListener("webglcontextlost", event => { event.preventDefault(); this.lost = true; });
         canvas.addEventListener("webglcontextrestored", () => { this.lost = false; });
     }
@@ -86,7 +103,7 @@ export class FarmWebGL {
             this.canvas.height = height;
         const mesh = buildFarmMesh(state);
         gl.viewport(0, 0, width, height);
-        gl.clearColor(0.10, 0.15, 0.19, 1);
+        gl.clearColor(0.65, 0.80, 0.93, 1);
         gl.clearDepth(1);
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);
@@ -106,12 +123,11 @@ export class FarmWebGL {
         vertex(this.attribute.material, 1, 9);
         gl.uniformMatrix4fv(this.uniform.projection, false, farmOrtho(width / height));
         gl.uniformMatrix4fv(this.uniform.view, false, farmViewMatrix());
-        gl.uniform3f(this.uniform.eye, ...FARM_EYE);
         gl.drawArrays(gl.TRIANGLES, 0, mesh.vertices.length / 10);
         const err = gl.getError();
         if (err !== gl.NO_ERROR)
             throw Error("FARM_WEBGL_ERROR: " + err);
-        return { renderer: "farm-webgl1", revision: state.revision, triangles: mesh.triangles,
+        return { renderer: "farm-webgl1", lighting: FARM_LIGHTING_VERSION, revision: state.revision, triangles: mesh.triangles,
             faces: mesh.faces, owned: mesh.owned, unowned: mesh.unowned,
             readyPlots: mesh.readyPlots, harvestedPlots: mesh.harvestedPlots,
             entrances: mesh.entrances, gold: mesh.gold, glError: err, viewport: [width, height] };

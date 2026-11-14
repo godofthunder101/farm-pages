@@ -1,7 +1,7 @@
 import {createSession,step,snapshot,diagnostic} from "./r10-p0-modules/r10-p0/session.js";
 import {renderSvg} from "./r10-p0-modules/r09-p0/core.js";
 import {createRenderer} from "./r10-p0-modules/r09-p3/renderer.js";
-import {createFarmRenderer} from "./r10-p0-modules/r10-p0/farm-renderer.js";
+import {createFarmRenderer} from "./r10-p0-modules/r10-p0/farm-renderer.js?daylight-v1";
 
 const $=id=>{
  const e=document.getElementById(id);
@@ -110,7 +110,7 @@ function draw(){
   }else{
    if(!farmRenderer)farmRenderer=createFarmRenderer(canvas);
    lastFrame=farmRenderer.render(state);
-   $("render-status").textContent="WebGL isometric farm · world revision "+lastFrame.revision+
+   $("render-status").textContent="WebGL daylight farm · world revision "+lastFrame.revision+
     " · "+lastFrame.triangles+" triangles · "+lastFrame.owned+" owned parcels"+
     " · "+lastFrame.entrances+" visible entrances";
   }
@@ -153,7 +153,7 @@ async function copy(){
   "WebGL mode: "+(lastFrame.renderer??"dungeon-webgl1")+
   " · frame revision "+lastFrame.revision+
   " · triangles "+lastFrame.triangles+
-  " · GL error "+lastFrame.glError:
+  " · lighting "+(lastFrame.lighting??"unchanged-dungeon")+" · GL error "+lastFrame.glError:
   "WebGL frame unavailable";
  const report=frame+"\n\n"+diagnostic(session);
  try{
