@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "r08-p0/v1",
+  "source": "deterministic-fixture",
+  "instanceId": "farm-a",
+  "revision": 3,
+  "worldMode": "farm",
+  "gold": 0,
+  "plots": [
+    {
+      "id": "plot-one",
+      "parcelId": "parcel-origin",
+      "x": 0,
+      "y": 0,
+      "label": "Lucerne <test> & 'demo' \"field\"",
+      "cropId": "lucerne",
+      "cropStatus": "harvested"
+    }
+  ],
+  "inventory": {
+    "lucerne": 0
+  },
+  "parcels": [
+    {
+      "id": "parcel-east",
+      "x": 1,
+      "y": 0,
+      "biomeId": "biome.neutral",
+      "owned": true,
+      "purchasePrice": 10,
+      "features": [
+        {
+          "id": "entrance-one",
+          "kind": "dungeon-entrance",
+          "dungeonDefinitionId": "dungeon-probe"
+        }
+      ]
+    },
+    {
+      "id": "parcel-far",
+      "x": 3,
+      "y": 0,
+      "biomeId": "biome.neutral",
+      "owned": false,
+      "purchasePrice": 5,
+      "features": []
+    },
+    {
+      "id": "parcel-origin",
+      "x": 0,
+      "y": 0,
+      "biomeId": "biome.neutral",
+      "owned": true,
+      "purchasePrice": null,
+      "features": []
+    }
+  ],
+  "orders": [
+    {
+      "id": "order-one",
+      "productId": "lucerne",
+      "quantity": 2,
+      "rewardGold": 10,
+      "status": "fulfilled"
+    }
+  ],
+  "availableEntrances": [
+    {
+      "id": "entrance-one",
+      "kind": "dungeon-entrance",
+      "dungeonDefinitionId": "dungeon-probe"
+    }
+  ],
+  "lastDecision": {
+    "schemaVersion": "r08-p0/v1",
+    "commandId": "cmd-purchase",
+    "actorId": "owner-a",
+    "instanceId": "farm-a",
+    "action": "farm.parcel.purchase",
+    "outcome": "accepted",
+    "previousRevision": 2,
+    "revision": 3,
+    "auditSequence": 3,
+    "reasonCode": null,
+    "events": [
+      {
+        "kind": "farm.parcel.purchased",
+        "parcelId": "parcel-east",
+        "costGold": 10
+      },
+      {
+        "kind": "farm.gold.changed",
+        "delta": -10,
+        "newGold": 0
+      },
+      {
+        "kind": "farm.feature.discovered",
+        "parcelId": "parcel-east",
+        "featureId": "entrance-one",
+        "featureKind": "dungeon-entrance"
+      }
+    ]
+  }
+}
