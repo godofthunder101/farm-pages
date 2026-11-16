@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Test P1-T01 — Isolated Procedural Expansion</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#10271e;color:#e4f0e8}
+*{box-sizing:border-box}body{margin:0}#app{max-width:1180px;margin:auto;padding:12px}
+h1{font-size:clamp(1.45rem,3.5vw,2rem);margin:4px 0}h2{font-size:1.05rem;margin:5px 0 10px}
+p{line-height:1.4}.subtitle{margin:0 0 12px;color:#bad7c6}
+button,select,input{font:inherit}button{background:#356f50;color:#fff;border:1px solid #83b995;border-radius:9px;padding:9px 12px;min-height:44px;cursor:pointer}
+button:hover{background:#468660}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #f8db64;outline-offset:2px}
+button:disabled{cursor:not-allowed;background:#365042;color:#b2c7ba;border-color:#617969}
+button.selected{background:#947837;color:#fff6c6}button.ghost{background:#244c3a}
+#status{padding:10px;border:1px solid #608b70;border-radius:9px;background:#26523a;min-height:44px;margin:10px 0}
+#status[data-kind="error"]{background:#713c37}#status[data-kind="success"]{background:#2c6849}
+.hud{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:10px 0}
+.hud>div{background:#234734;padding:9px;border-radius:8px;text-align:center}
+.hud span{display:block;font-size:.75rem;color:#bfd9c7}.hud strong{font-size:1rem}
+#scene{position:relative;background:#142d26;border:1px solid #52755e;border-radius:13px;overflow:hidden}
+#viewport{position:relative;width:100%;height:min(56vh,520px);min-height:300px;touch-action:none;overflow:hidden}
+#world{width:100%;height:100%;display:block;touch-action:none;background:#203d30}
+#markers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.marker{position:absolute;transform:translate(-50%,-50%);min-width:44px;min-height:44px;
+ border-radius:50%;font-size:1.1rem;padding:0;pointer-events:auto;touch-action:manipulation}
+.marker.frontier{background:#345f4aaa;border:2px dashed #9ed3a9;color:#eaffef}
+.marker.owned{background:#3c6252c7;border:1px solid #cce0cf;color:#fff}
+.marker.entrance{background:#713e8e;border:2px solid #e2b5ff}
+.marker.selected{box-shadow:0 0 0 4px #ffd86d}
+#renderStatus{padding:7px 10px;background:#112b20;color:#c3dec9;font-size:.78rem}
+#dock{position:absolute;left:8px;right:8px;bottom:38px;background:#15372beF;
+ border:1px solid #8ac2a2;border-radius:13px;max-height:48%;display:flex;flex-direction:column;
+ box-shadow:0 8px 25px #0006;z-index:3}
+#dock[hidden]{display:none}#dockHeading{padding:8px 12px 3px;margin:0}
+#dockInfo{padding:7px 12px;overflow-y:auto;min-height:20px;font-size:.91rem}
+#dockInfo p{margin:4px 0}#dockFooter{display:flex;flex-wrap:wrap;gap:7px;padding:8px 10px;background:#244735;
+ position:sticky;bottom:0;border-radius:0 0 13px 13px}
+#dockFooter button{flex:1}
+#biomes{display:flex;gap:7px;margin:6px 0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.panel{background:#193e2e;border:1px solid #4e785a;border-radius:12px;padding:11px;margin:10px 0}
+#dungeonControls[hidden],#farmControls[hidden],#cameraControls[hidden],[hidden]{display:none!important}
+#dungeonControls .row button{flex:1;min-width:115px}
+#inspectGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#inspectSVG{width:100%;min-height:130px;max-height:280px;background:#162b26;object-fit:contain}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:230px;overflow:auto;background:#0e241c;
+ padding:10px;border:1px solid #395b48;border-radius:8px;font-size:.76rem}
+#history{max-height:190px;overflow:auto;padding-left:22px}
+#history li{margin:3px 0;font-size:.82rem}
+#settings{border:1px solid #a5cbb4;border-radius:14px;background:#183a2b;color:#e8f7ed;
+ max-height:85vh;width:min(440px,95vw);padding:18px}
+#settings::backdrop{background:#051b16b9}
+#settings>header{display:flex;justify-content:space-between;gap:14px;align-items:center;position:sticky;top:0;background:#183a2b}
+#settings fieldset{border:1px solid #648b72;border-radius:10px;margin:10px 0}
+#settings label{display:block;padding:8px;min-height:44px}
+#settings label small{display:block;color:#bcd4c4;margin-left:26px}
+#settings input{margin-right:8px}#deviceStatus{color:#f6dc91}
+.tools button{margin:4px}#cap{width:75px;min-height:44px}
+@media(max-width:720px){.hud{grid-template-columns:repeat(3,1fr)}
+ #inspectGrid{grid-template-columns:1fr}#viewport{height:48vh;min-height:285px}
+ #dock{max-height:55%}#dockFooter button{font-size:.88rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Minimal public-GitHub-Pages interaction gate; not security or server authentication. */
+[hidden]{display:none!important}
+#access-gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;background:#10271e}
+#access-gate form{width:min(420px,100%);padding:22px;background:#1c4130;border:1px solid #92b8a0;border-radius:15px;box-shadow:0 8px 30px #0007}
+#access-gate h1{margin:4px 0 12px}
+#access-gate label{display:block;font-weight:650;margin:15px 0 6px}
+#access-gate input{display:block;width:100%;min-height:48px;border-radius:8px;border:1px solid #a8c7b1;padding:10px;background:#f9fff9;color:#102519}
+#access-gate button{width:100%;margin:12px 0 0}
+#access-error{min-height:1.6em;color:#ffe0ae;margin:10px 0 0}
+#access-gate small{color:#c8dccd;line-height:1.5;display:block}
+</style></head>
+<body>
+<div id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-heading">
+<form id="access-form"><small>FARM TEST · P1-T01 PHONE PLAYTEST</small>
+<h1 id="access-heading">Enter the access word</h1>
+<p>This is a public test site. The word unlocks interaction only; it does not protect the game files or provide an account.</p>
+<label for="access-word">Access word</label>
+<input type="password" id="access-word" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+<button id="access-submit" type="submit">Unlock game</button>
+<p id="access-error" role="status" aria-live="polite"></p>
+<small>Use the same access word as the original Farm Test page. Do not enter sensitive information.</small>
+</form></div>
+<main id="app" hidden inert>
+<h1>Farm Test P1-T01 — First procedural expansion</h1>
+<p class="subtitle">Public browser-memory playtest with an interaction-only word gate. No real purchase, durable save, player accounts or server authority.</p>
+<div class="row"><button id="settingsOpen" type="button">Settings</button>
+<button id="reset" type="button" class="ghost">Reset Trial</button>
+<span id="ready" data-ready="0" aria-live="off">Loading the isolated fixture…</span></div>
+<div id="status" role="status" aria-live="polite" data-kind="info">Initializing local trial…</div>
+<div class="hud" aria-label="Farm and dungeon progress">
+<div><span>Mode</span><strong id="hudMode">Farm</strong></div>
+<div><span>Gold</span><strong id="hudGold">0</strong></div>
+<div><span>Lucerne</span><strong id="hudCrop">0</strong></div>
+<div><span>Owned land</span><strong id="hudParcels">1</strong></div>
+<div><span>Stamina</span><strong id="hudStamina">8/8</strong></div>
+<div><span>Revision</span><strong id="hudRevision">0</strong></div>
+</div>
+<section id="scene" aria-label="Farm and dungeon 3D view">
+<div id="viewport" aria-label="Fixed-angle farm canvas with keyboard-accessible parcel markers">
+<canvas id="world" width="960" height="540" aria-label="3D farm or first-person dungeon; use the marker buttons to select parcels">Your browser needs WebGL for the 3D view.</canvas>
+<div id="markers" aria-label="Owned parcels and expansion candidate buttons"></div>
+</div>
+<section id="dock" aria-label="Selected farm object" hidden>
+<h2 id="dockHeading">Selection</h2>
+<div id="dockInfo"></div>
+<div id="dockFooter">
+<button type="button" id="purchase" hidden>Purchase</button>
+<button type="button" id="enter" hidden>Enter Dungeon</button>
+<button type="button" id="cancel">Cancel</button>
+<button type="button" id="closePanel" class="ghost">Close</button>
+</div>
+</section>
+<div id="renderStatus" role="status">Waiting for renderer…</div>
+</section>
+<section id="cameraControls" class="panel" aria-label="Camera controls">
+<div class="row">
+<button id="showAll" type="button">Show All</button>
+<button id="previousView" type="button" disabled>Previous View</button>
+<span>Drag the farm to pan. Pinch to zoom. No camera shake.</span>
+</div>
+</section>
+<section id="farmControls" class="panel" aria-label="Farm actions">
+<h2>Farm actions</h2>
+<div class="row">
+<button id="harvest" type="button">Harvest lucerne</button>
+<button id="order" type="button">Fulfil market order (+10 gold)</button>
+<button id="recover" type="button">Recover dungeon stamina</button>
+</div>
+<p>Select a <strong>+</strong> marker along an owned edge to choose a neighbouring parcel. Your first purchase must be earned from the lucerne order.</p>
+</section>
+<section id="dungeonControls" class="panel" aria-label="Dungeon actions" hidden>
+<h2>R09-P3 fixed dungeon (same accepted movement rules)</h2>
+<div class="row">
+<button type="button" data-dungeon-action="dungeon.move.forward">↑ Forward</button>
+<button type="button" data-dungeon-action="dungeon.move.backward">↓ Back</button>
+<button type="button" data-dungeon-action="dungeon.turn.left">↶ Turn Left</button>
+<button type="button" data-dungeon-action="dungeon.turn.right">↷ Turn Right</button>
+</div><div class="row">
+<button type="button" data-dungeon-action="dungeon.chest.open">Open chest</button>
+<button type="button" data-dungeon-action="dungeon.card.use">Play first card</button>
+<button type="button" data-dungeon-action="dungeon.attack.basic">Basic strike</button>
+<button type="button" data-dungeon-action="farm.return">Return to farm</button>
+</div><p id="dungeonDetails"></p>
+</section>
+<details id="devTools" class="panel tools"><summary>Dev Tools — local fixtures and inspection</summary>
+<p>Grants and caps affect only this disposable browser session.</p>
+<button id="grant" type="button">Grant +20 test gold (later purchases only)</button>
+<label for="cap">Owned parcel cap</label> <input id="cap" type="number" min="2" max="32" value="8">
+<button id="setCap" type="button">Set test cap</button>
+<button id="copyReport" type="button">Copy diagnostic report</button>
+<div id="inspectGrid">
+<section><h2>Semantic farm SVG</h2><img id="inspectSVG" alt="Semantic top-down farm parcel inspection"></section>
+<section><h2>Current JSON inspection</h2><pre id="inspectJSON" tabindex="0"></pre></section>
+</div><h2>Recent action history</h2><ol id="history"></ol>
+</details>
+<dialog id="settings" aria-labelledby="settingsHeading">
+<header><h2 id="settingsHeading" tabindex="-1">Settings</h2><button id="settingsClose" type="button">Close</button></header>
+<p>Reduce Camera Motion (automatic camera moves; manual pan and zoom remain available).</p>
+<fieldset><legend>Camera motion preference</legend>
+<label><input type="radio" name="motion" value="device">Use Device Setting
+<small>Follow your device's motion preference.</small></label>
+<label><input type="radio" name="motion" value="on">Reduce Motion On
+<small>Remove automatic camera animations.</small></label>
+<label><input type="radio" name="motion" value="off">Reduce Motion Off
+<small>Use short, interruptible camera animations.</small></label>
+</fieldset><p id="deviceStatus"></p>
+</dialog>
+</main><script>
+// Same word-digest contract as farm-pages/app.js (SHA-256 over a normalized word).
+// GitHub Pages is PUBLIC; this is an interaction gate, not authentication.
+(() => {
+  'use strict';
+  const expected = '23fbb35c96a1f70d77d4524ba3cf7f388207d1d3c5490ef4070854a3e8dbcf21';
+  const form = document.getElementById('access-form');
+  const input = document.getElementById('access-word');
+  const button = document.getElementById('access-submit');
+  const error = document.getElementById('access-error');
+  let loading = false;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (loading) return;
+    loading = true;
+    button.disabled = true;
+    error.textContent = '';
+    try {
+      const normalized = input.value.trim().toLowerCase();
+      const bytes = new TextEncoder().encode('farm-pages:v1:' + normalized);
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      const hex = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hex !== expected) {
+        error.textContent = 'Incorrect word. Try again.';
+        input.value = '';
+        input.focus();
+        return;
+      }
+      input.value = '';
+      document.getElementById('access-gate').hidden = true;
+      const app = document.getElementById('app');
+      app.hidden = false;
+      app.removeAttribute('inert');
+      const module = document.createElement('script');
+      module.type = 'module';
+      module.src = './r10-p1-trial.js';
+      module.onerror = () => {
+        app.hidden = true;
+        app.setAttribute('inert', '');
+        document.getElementById('access-gate').hidden = false;
+        error.textContent = 'Unable to load the game. Reload and try again.';
+      };
+      document.body.appendChild(module);
+    } catch (cause) {
+      error.textContent = 'Word checking requires HTTPS or localhost.';
+    } finally {
+      loading = false;
+      button.disabled = false;
+    }
+  });
+  input.focus();
+})();
+</script>
+</body></html>
